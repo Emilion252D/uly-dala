@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ұлы Дала</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--BODY-->
+<button id="soundBtn" class="sound" type="button" aria-pressed="true">🔊 <span>Звук включён</span></button>
+
+<main id="app">
+  <!-- Главный экран -->
+  <section id="home" class="screen active">
+    <div class="hero">
+      <div id="heroArt" class="hero-art"></div>
+      <div class="hero-text">
+        <p class="eyebrow">Игра-путешествие · 5 уровней</p>
+        <h1>Ұлы Дала</h1>
+        <p class="sub">Путешествие по культуре Казахстана</p>
+      </div>
+    </div>
+    <div class="orn" aria-hidden="true"></div>
+    <div class="home-body">
+      <div class="actions">
+        <button id="btnStart" class="btn primary" type="button">Начать игру</button>
+        <button id="btnHow" class="btn" type="button">Как играть</button>
+        <button id="btnCulture" class="btn" type="button">О культуре</button>
+      </div>
+      <div class="panel">
+        <div class="panel-head">
+          <strong>5 уровней</strong>
+          <span id="progText">Пройдено 0 из 5</span>
+        </div>
+        <div class="bar"><i id="progBar"></i></div>
+        <ol id="levelList" class="levels"></ol>
+        <label class="calm"><input type="checkbox" id="calm"> Спокойный режим: без таймера</label>
+      </div>
+    </div>
+  </section>
+
+  <!-- Игра -->
+  <section id="game" class="screen">
+    <header class="g-head">
+      <div class="g-title">
+        <span id="gLevel" class="eyebrow">Уровень 1 / 5</span>
+        <h2 id="gName">Символы Великой степи</h2>
+      </div>
+      <div class="bar slim"><i id="gBar"></i></div>
+    </header>
+    <div class="hud">
+      <div class="stat" id="timeBox"><small>Время</small><b id="gTime">03:00</b></div>
+      <div class="stat"><small>Очки</small><b id="gScore">0</b></div>
+      <span class="grow"></span>
+      <button id="btnHint" class="btn tool" type="button">Подсказка <i id="hintN">3</i></button>
+      <button id="btnShuffle" class="btn tool" type="button">Перемешать <i id="shufN">2</i></button>
+      <button id="btnPause" class="btn tool" type="button" aria-label="Пауза">Пауза</button>
+    </div>
+    <div id="boardWrap" class="board-wrap">
+      <div id="board" class="board">
+        <div id="tiles"></div>
+        <svg id="lines" aria-hidden="true"></svg>
+      </div>
+    </div>
+    <p id="caption" class="caption"></p>
+  </section>
+
+  <!-- Статья после уровня -->
+  <section id="article" class="screen"><div id="articleBox" class="article"></div></section>
+
+  <!-- О культуре -->
+  <section id="culture" class="screen">
+    <div class="page">
+      <p class="eyebrow">О культуре</p>
+      <h2>Пять страниц Великой степи</h2>
+      <p class="lead">Казахская культура выросла из кочевой жизни в степи. Дом, музыка, одежда и обычаи здесь устроены так, чтобы их можно было взять с собой. Каждый пройденный уровень открывает одну страницу этой истории.</p>
+      <div id="cultureList" class="c-list"></div>
+      <button class="btn" type="button" data-go="home">На главную</button>
+    </div>
+  </section>
+</main>
+
+<!-- Как играть -->
+<div id="howto" class="modal" hidden>
+  <div class="sheet">
+    <h2>Как играть</h2>
+    <div class="demo" aria-hidden="true">
+      <div id="demoTiles"></div>
+      <svg viewBox="0 0 3 2"><polyline points=".5,.5 .5,1.5 2.5,1.5" pathLength="1"/></svg>
+    </div>
+    <ol class="steps">
+      <li>Найди две одинаковые картинки.</li>
+      <li>Нажми на первую.</li>
+      <li>Нажми на вторую.</li>
+      <li>Если между ними есть свободный путь не больше чем с двумя поворотами, картинки исчезнут. Линия может идти и за краем поля.</li>
+      <li>Очисти всё поле, чтобы пройти уровень.</li>
+    </ol>
+    <p class="note">Каждая найденная пара добавляет 3 секунды. Подсказок и перемешиваний на уровень немного, а за неиспользованные подсказки дают очки.</p>
+    <button id="howOk" class="btn primary" type="button">Понятно</button>
+  </div>
+</div>
+
+<!-- Пауза -->
+<div id="pause" class="modal" hidden>
+  <div class="sheet narrow">
+    <h2>Пауза</h2>
+    <p class="note">Поле скрыто, время остановлено.</p>
+    <button id="pResume" class="btn primary" type="button">Продолжить</button>
+    <button id="pRestart" class="btn" type="button">Начать уровень заново</button>
+    <button id="pHome" class="btn" type="button">На главную</button>
+  </div>
+</div>
+
+<!-- Время вышло -->
+<div id="timeout" class="modal" hidden>
+  <div class="sheet narrow">
+    <h2>Время вышло</h2>
+    <p class="note">Ничего страшного. Попробуй ещё раз или включи спокойный режим без таймера.</p>
+    <button id="tRetry" class="btn primary" type="button">Попробовать снова</button>
+    <button id="tCalm" class="btn" type="button">Играть без таймера</button>
+    <button id="tHome" class="btn" type="button">На главную</button>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status"></div>
+
+<script src="assets/icons.js"></script>
+<script src="assets/scenes.js"></script>
+<script src="content.js"></script>
+<script src="script.js"></script>
+<!--/BODY-->
+</body>
+</html>
